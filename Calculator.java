@@ -31,4 +31,21 @@ public class Calculator {
         // Đóng Scanner
         scanner.close();
     }
+    public static int calculate(int firstOperand, int secondOperand, char operator) {
+        switch (operator) {
+            case '+':
+                return firstOperand + secondOperand;
+            case '-':
+                return firstOperand - secondOperand;
+            case '*':
+                return firstOperand * secondOperand;
+            case '/':
+                if (secondOperand != 0)
+                    return firstOperand / secondOperand;
+                else
+                    throw new RuntimeException("Không thể chia cho 0");
+            default:
+                throw new RuntimeException("Phép toán không được hỗ trợ");
+        }
+    }
 }
