@@ -1,7 +1,14 @@
+package James_Module2;
+
 import java.util.Scanner;
+import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import static org.junit.Assert.assertEquals;
+
 public class Calculator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
         // Nhập số thứ nhất
         System.out.print("Nhập số thứ nhất: ");
         int num1 = scanner.nextInt();
@@ -28,9 +35,22 @@ public class Calculator {
         System.out.println("Kết quả phép trừ: " + difference);
         System.out.println("Kết quả phép nhân: " + product);
 
+        // Sử dụng phương thức calculate
+        char operator = getOperator(scanner);
+        int result = calculate(num1, num2, operator);
+        System.out.println("Kết quả phép tính: " + result);
+
         // Đóng Scanner
         scanner.close();
     }
+
+    // Phương thức để nhận toán tử từ người dùng
+    private static char getOperator(Scanner scanner) {
+        System.out.print("Nhập toán tử (+, -, *, /): ");
+        return scanner.next().charAt(0);
+    }
+
+    // Phương thức tính toán
     public static int calculate(int firstOperand, int secondOperand, char operator) {
         switch (operator) {
             case '+':
