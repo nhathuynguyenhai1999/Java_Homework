@@ -1,55 +1,92 @@
 package James_Module2;
+
 import java.util.Arrays;
 
-//import javax.xml.bind.annotation.XmlType;
+class MyList {
+    private static final int INITIAL_CAPACITY = 10;
+    private Object[] elements;
+    private int size;
 
-//import static com.sun.xml.internal.fastinfoset.util.ValueArray.DEFAULT_CAPACITY;
-
-
-public class MyListTest {
-    public static void main(String[] args) {
-        MyList<Integer> listInteger = new MyList<>();
-        listInteger.add(1);
-        listInteger.add(2);
-        listInteger.add(3);
-        listInteger.add(4);
-        listInteger.add(5);
-
-        System.out.println("element 4: " + listInteger.get(4));
-        System.out.println("element 1: " + listInteger.get(1));
-        System.out.println("element 2: " + listInteger.get(2));
-
-        // Uncomment the lines below to see how exceptions are handled
-        // System.out.println("element 6: " + listInteger.get(6));
-        // System.out.println("element -1: " + listInteger.get(-1));
+    public MyList() {
+        elements = new Object[INITIAL_CAPACITY];
+        size = 0;
     }
 
-    static class MyList<E> {
-        private int size = 0;
-        private static final int DEFAULT_CAPACITY = 10;
-        private Object[] elements;
+    public void add(Object element) {
+        ensureCapacity();
+        elements[size] = element;
+        size++;
+    }
 
-        public MyList() {
-            elements = new Object[DEFAULT_CAPACITY];
+    public void add(int index, Object element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
 
-        public void ensureCapa() {
-            int newSize = elements.length * 2;
-            elements = Arrays.copyOf(elements, newSize);
+        ensureCapacity();
+
+        // Shift elements to make space for the new element
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+
+        // Insert the new element at the specified index
+        elements[index] = element;
+        size++;
+    }
+
+    public Object get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return elements[index];
+    }
+
+    public void remove(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
 
-        public void add(E e) {
-            if (size == elements.length) {
-                ensureCapa();
-            }
-            elements[size++] = e;
-        }
+        // Shift elements to remove the element at the specified index
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        size--;
+    }
 
-        public E get(int i) {
-            if (i >= size || i < 0) {
-                throw new IndexOutOfBoundsException("Index: " + i + ", Size: " + size);
-            }
-            return (E) elements[i];
+    public int size() {
+        return size;
+    }
+
+    private void ensureCapacity() {
+        if (size == elements.length) {
+            int newCapacity = elements.length * 2;
+            elements = Arrays.copyOf(elements, newCapacity);
         }
     }
 }
+
+public class MyListTest {
+    public static void main(String[] args) {
+        MyList myList = new MyList();
+
+        // Testing add method
+        myList.add(1);
+        myList.add(2);
+        myList.add(3);
+
+        // Testing add at specific index
+        myList.add(1, 5);
+
+        // Testing get method
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println("Element at index " + i + ": " + myList.get(i));
+        }
+
+        // Testing remove method
+        myList.remove(2);
+
+        // Displaying the final list
+        System.out.println("Final list after removal:");
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println("Element at index " + i + ": " + myList.get(i));
+        }
+    }
+}
+
